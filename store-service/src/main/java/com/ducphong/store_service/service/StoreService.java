@@ -38,7 +38,7 @@ public class StoreService {
         if(!stores.isEmpty()){
             return new ResponseEntity<List<Store>>(stores, HttpStatus.OK);
         }else {
-            return new ResponseEntity<>("No Stores",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("No Stores !!!",HttpStatus.NOT_FOUND);
         }
     }
 }
