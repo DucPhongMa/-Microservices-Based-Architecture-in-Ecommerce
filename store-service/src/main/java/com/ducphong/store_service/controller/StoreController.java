@@ -1,5 +1,6 @@
 package com.ducphong.store_service.controller;
 
+import com.ducphong.store_service.kafka.StoreKafkaProducer;
 import com.ducphong.store_service.model.Store;
 import com.ducphong.store_service.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,13 @@ public class StoreController {
     @Autowired
     private StoreService storeService;
 
-    @PostMapping("/api/store")
-    public ResponseEntity<?> createStudent(@RequestBody Store store){
-        return storeService.createStore(store);
+    @Autowired
+    private StoreKafkaProducer storeKafkaProducer;
+
+    @PostMapping("/api/store/request")
+    public ResponseEntity<String> requestStoreInfo(@RequestBody Store store){
+        storeKafkaProducer.sendMessage(store);
+        return ResponseEntity.ok("Json message sent to the kafka topic");
     }
 
     @GetMapping("/api/store/{id}")
