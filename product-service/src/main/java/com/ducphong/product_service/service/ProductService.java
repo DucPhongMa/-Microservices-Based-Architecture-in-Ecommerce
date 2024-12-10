@@ -5,6 +5,9 @@ import com.ducphong.product_service.model.Product;
 import com.ducphong.product_service.repository.CategoryRepository;
 import com.ducphong.product_service.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -92,12 +95,9 @@ public class ProductService {
         }
     }
 
-    public ResponseEntity<?> fetchAllProducts(){
-        List<Product> products = productRepository.findAll();
-        if(!products.isEmpty()){
-            return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>("No Products",HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Page<Product>> fetchAllProducts(int pageNo, int pageSize){
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Product> products = productRepository.findAll(pageable);
+        return new ResponseEntity<Page<Product>>(products, HttpStatus.OK);
     }
 }
